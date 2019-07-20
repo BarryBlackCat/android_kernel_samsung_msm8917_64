@@ -38,13 +38,21 @@ TRACE_EVENT(sync_wait,
 	TP_ARGS(fence, begin),
 
 	TP_STRUCT__entry(
+#ifdef CONFIG_SYNC_DEBUG
 			__string(name, fence->name)
+#else
+			__string(name, "")
+#endif
 			__field(s32, status)
 			__field(u32, begin)
 	),
 
 	TP_fast_assign(
-			__assign_str(name, fence->name);
+#ifdef CONFIG_SYNC_DEBUG
+			__string(name, fence->name)
+#else
+			__string(name, "")
+#endif
 			__entry->status = fence->status;
 			__entry->begin = begin;
 	),
